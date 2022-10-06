@@ -15,5 +15,3 @@ class Cactus(Obstacle):
             self.rect.y = self.LARGE_CACTUS_Y
         elif images == SMALL_CACTUS:
             self.rect.y = self.SMALL_CACTUS_Y
-        else:
-            pass

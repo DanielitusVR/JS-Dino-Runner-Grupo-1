@@ -4,7 +4,7 @@ from .obstacle import Obstacle
 
 
 class Bird(Obstacle):
-    POS_BIRD_Y = 200 
+    POS_BIRD_Y = 265
 
     def __init__(self, images):
         type = 0
