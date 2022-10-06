@@ -2,8 +2,9 @@ import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.score import Score
+from dino_runner.components.text import TextAlt
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING, FONT_STYLE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING, DEATH
 
 class Game:
     def __init__(self):
@@ -36,6 +37,7 @@ class Game:
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
+        self.score.score = 0
         self.obstacle_manager.reset_obstacles()
         while self.playing:
             self.events()
@@ -73,24 +75,28 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
-    def show_menu(self):
+    def show_menu(self): 
         self.screen.fill((255, 255, 255))
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
-            font = pygame.font.Font(FONT_STYLE, 30)
-            text_component = font.render("Press any key to start", True, (0, 0, 0))
-            text_rect = text_component.get_rect()
-            text_rect.center = (half_screen_width, half_screen_height)
-            self.screen.blit(text_component, text_rect)
+            text = TextAlt("Press any key to start", 30, half_screen_width, half_screen_height, self.screen)
+            text.draw()
+            dino_image = RUNNING[0]
         else:
-            # mostrar mensaje de volver a jugar (tarea)
-            # mostrar el numero de muertes actuales
-            # mostrar el puntaje
-            pass
+            text = TextAlt("YOU DIED. Press any key to retry", 30, half_screen_width, half_screen_height, self.screen)
+            text.draw()
+            
+            text.update(f"Count of Deaths: {self.death_count}", 25, half_screen_width, half_screen_height + 40)
+            text.draw()
 
-        self.screen.blit(RUNNING[0], (half_screen_width - 35, half_screen_height - 140))
+            text.update(f"Points: {self.score.score}", 25, half_screen_width, half_screen_height + 75)
+            text.draw()
+
+            dino_image = DEATH
+
+        self.screen.blit(dino_image, (half_screen_width - 35, half_screen_height - 140))
         pygame.display.update()
         self.handle_key_events_on_menu()
 
