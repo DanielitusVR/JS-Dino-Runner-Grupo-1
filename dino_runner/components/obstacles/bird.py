@@ -10,3 +10,10 @@ class Bird(Obstacle):
         type = 0
         super().__init__(images, type)
         self.rect.y = self.POS_BIRD_Y
+        self.fly_index = 0
+
+    def draw(self, screen):
+        if self.fly_index >= 11:
+            self.fly_index = 0
+        screen.blit(self.images[self.fly_index // 6], self.rect)
+        self.fly_index += 1

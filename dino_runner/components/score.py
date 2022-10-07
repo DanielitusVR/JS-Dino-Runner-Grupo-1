@@ -12,8 +12,8 @@ class Score:
             game.game_speed += 2
 
     def draw(self, screen):
-        text = TextAlt(f"Points: {self.score}", 22, 1000, 50, screen)
-        text.draw()
+        text = TextAlt(f"Points: {self.score}", 22, 1000, 50,)
+        text.draw(screen)
 
     def restart_score(self):
         self.score = 0

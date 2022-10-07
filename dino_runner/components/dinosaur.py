@@ -1,11 +1,11 @@
 import pygame
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import DEFAULT_TYPE, DUCKING, DUCKING_SHIELD, JUMPING, JUMPING_SHIELD, RUNNING, RUNNING_SHIELD, SHIELD_TYPE
+from dino_runner.utils.constants import DEFAULT_TYPE, DUCKING, DUCKING_HAMMER, DUCKING_SHIELD, HAMMER_TYPE, JUMPING, JUMPING_HAMMER, JUMPING_SHIELD, RUNNING, RUNNING_HAMMER, RUNNING_SHIELD, SHIELD_TYPE
 
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-JUM_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUM_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
 
 
 class Dinosaur(Sprite):
@@ -29,6 +29,8 @@ class Dinosaur(Sprite):
 
         self.has_power_up = False
         self.power_up_time_up = 0
+        self.has_hammer = False
+        self.uses_hammer = 0
     
     def update(self, user_input):
         if self.dino_run:
@@ -83,7 +85,12 @@ class Dinosaur(Sprite):
     def draw (self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-    def on_pick_power_up(self, start_time, duration, type):
+    def on_pick_shield(self, start_time, duration, type):
         self.has_power_up = True
         self.power_up_time_up = start_time + (duration * 1000)
         self.type = type
+
+    def on_pick_hammer(self, type):
+        self.has_power_up = True
+        self.type = type
+        self.uses_hammer = 3
