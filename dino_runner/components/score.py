@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner.components.text import TextAlt
+from dino_runner.components.text_alt import TextAlt
 
 class Score:
     def __init__(self):
@@ -14,3 +14,6 @@ class Score:
     def draw(self, screen):
         text = TextAlt(f"Points: {self.score}", 22, 1000, 50, screen)
         text.draw()
+
+    def restart_score(self):
+        self.score = 0
