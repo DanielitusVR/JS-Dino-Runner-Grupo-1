@@ -74,7 +74,7 @@ class Game:
         self.obstacle_manager.update(self.game_speed, self.player, self.on_death)
         self.score.update(self)
         self.power_up_manager.update(self.game_speed, self.player, self.score.score)
-        self.reward_manager.update(randint(0,1))
+        self.reward_manager.update(self.heart_manager)
 
     def draw(self):
         self.clock.tick(FPS)

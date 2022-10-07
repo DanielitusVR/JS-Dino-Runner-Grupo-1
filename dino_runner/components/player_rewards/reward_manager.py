@@ -1,3 +1,5 @@
+from random import randint
+from secrets import randbelow
 import pygame
 from dino_runner.components.player_rewards.half_heart import HalfHeart
 from dino_runner.components.player_rewards.chronometer import Chronometer
@@ -12,13 +14,14 @@ class RewardManager:
         self.has_reward = False
         self.rewards = []
 
-    def update(self, option, player):
+    def update(self, heart_manager):
+        option = randint(0,1)
         x_position = 10
         y_position = 50
         if len(self.rewards) == 0:
             if(option == 0):
                 self.rewards.append(HalfHeart(x_position, y_position))
-                player.heart
+                heart_manager.heart_count += 1
             else:
                 self.rewards.append(Chronometer(x_position, y_position))  
             self.has_reward = True
