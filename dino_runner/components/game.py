@@ -31,7 +31,7 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
         self.heart_manager = PlayerHeartManager()
-        self.reward_manager = RewardManager(self.screen)
+        self.reward_manager = RewardManager()
 
         self.death_count = 0
         self.score = Score() 
@@ -61,6 +61,7 @@ class Game:
         self.score.restart_score()
         self.power_up_manager.reset_power_ups()
         self.heart_manager.reset_hearts()
+        self.reward_manager.reset_rewards()
 
     def events(self):
         for event in pygame.event.get():
