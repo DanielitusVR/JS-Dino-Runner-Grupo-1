@@ -29,8 +29,12 @@ class Dinosaur(Sprite):
 
         self.has_power_up = False
         self.power_up_time_up = 0
+
         self.has_hammer = False
         self.uses_hammer = 0
+
+        self.has_reward = False
+        self.reward_time_up = 0
     
     def update(self, user_input):
         if self.dino_run:
@@ -85,6 +89,10 @@ class Dinosaur(Sprite):
     def draw (self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
+    def reward_cooldown(self, start_time, duration):
+        self.has_reward = True
+        self.reward_time_up = start_time + (duration * 1000)
+    
     def on_pick_shield(self, start_time, duration, type):
         self.has_power_up = True
         self.power_up_time_up = start_time + (duration * 1000)

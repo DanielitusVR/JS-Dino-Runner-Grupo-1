@@ -1,31 +1,33 @@
 from random import randint
 from secrets import randbelow
 import pygame
+from dino_runner.components.obstacles import obstacle_manager
 from dino_runner.components.player_rewards.half_heart import HalfHeart
 from dino_runner.components.player_rewards.chronometer import Chronometer
 from dino_runner.components.text_alt import TextAlt
-from dino_runner.utils.constants import HALF_HEART
+from dino_runner.utils.constants import CHRONOMETER, CHRONOMETER_TYPE, HALF_HEART
 
 
 class RewardManager:
     def __init__(self):
         self.start_time_cd = 0
         self.duration = 4
-        self.has_reward = False
         self.rewards = []
 
-    def update(self, heart_manager):
+    def generate_reward(self):
         option = randint(0,1)
-        x_position = 10
-        y_position = 50
-        if len(self.rewards) == 0:
+        if len(self.rewards == 0):
             if(option == 0):
-                self.rewards.append(HalfHeart(x_position, y_position))
-                heart_manager.heart_count += 1
+                self.rewards.append(HalfHeart())
             else:
-                self.rewards.append(Chronometer(x_position, y_position))  
-            self.has_reward = True
-        
+                self.rewards.append(Chronometer())
+
+    def update(self, player, obstacle_manager):
+        if(player.dino_rect.colliderect(obstacle_manager.obstacles[0].rect)):
+            for reward in self.rewards:
+                reward.start_time = pygame.time.get_ticks()
+                player.reward_cooldown(reward.start_time, reward.duration_cd)
+                self.power_ups.remove(reward)
 
     def draw(self, screen):
         reward = self.rewards[0]
@@ -33,4 +35,3 @@ class RewardManager:
 
     def reset_rewards(self):
         self.rewards = []
-            

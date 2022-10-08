@@ -1,4 +1,5 @@
 from random import randint
+from time import time
 import pygame
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
@@ -74,7 +75,6 @@ class Game:
         self.obstacle_manager.update(self.game_speed, self.player, self.on_death)
         self.score.update(self)
         self.power_up_manager.update(self.game_speed, self.player, self.score.score)
-        self.reward_manager.update(self.heart_manager)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -113,11 +113,10 @@ class Game:
             text.change_text(f"Count of Deaths: {self.death_count}")
             text.set_size(25)
             text.set_position(0, 45)
-            ##text.update(f"Count of Deaths: {self.death_count}", 25, self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT+ 40)
             text.draw(self.screen)
 
             text.change_text(f"Points: {self.score.score}")
-            text.set_position(0, 25)      
+            text.set_position(0, 40)      
             text.draw(self.screen)
 
             dino_image = DEATH
@@ -144,10 +143,8 @@ class Game:
         if self.player.has_hammer:
             lucky = 1 ##randint(0, 2)
             if lucky == 1:
-                option = randint(0,1)
-                self.reward_manager.update(option)
-                self.reward_manager.draw(self.screen)
-
+                self.player.has_reward = True
+                self.draw_reward_active(self.player)
                 
         if not is_invincible:
             pygame.time.delay(500)
@@ -156,6 +153,16 @@ class Game:
             
         return is_invincible
 
+    def draw_reward_active(self, player):
+        if self.player.has_reward:
+            time_to_show = round((player.reward_time_up - pygame.time.get_ticks()) / 1000, 2)
+            if time_to_show >= 0:
+                text = TextAlt(f"You picked a reward. Your cooldown is {time_to_show} seconds.", 22, 550, 40)
+                text.draw(self.screen)
+            else:
+                self.player.has_reward = False
+
+    
     def draw_power_up_active(self):
         if self.player.has_power_up:
             if(self.player.type == SHIELD_TYPE):
